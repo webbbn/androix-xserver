@@ -274,7 +274,7 @@ int main(int argc, char *argv[], char *envp[])
 	    }
 	}
 
-#ifdef XQUARTZ
+#if defined(XQUARTZ) || defined(DDXANDROID)
     /* Let the other threads know the server is done with its init */
     pthread_mutex_lock(&serverInitCompleteMutex);
     serverInitComplete = TRUE;
