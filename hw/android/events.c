@@ -210,36 +210,51 @@ androidTrackballProc(DeviceIntPtr pDevice, int onoff)
 #undef NAXES
 }
 
-
 void
 InitInput(int argc, char *argv[])
 {
     DeviceIntPtr p, t, k;
     Atom xiclass;
-    LogMessage(X_DEFAULT, "[events] in InitInput");
+    int rc;
+
+    /* InitEvents(); */
 
     LogMessage(X_DEFAULT, "[events] InitInput: adding mouse proc %p (serverClient: %p)", androidMouseProc, serverClient);
     p = AddInputDevice(serverClient, androidMouseProc, TRUE);
+    p->name = strdup("pointer");
     LogMessage(X_DEFAULT, "[events] InitInput: adding trackball proc %p (serverClient: %p)", androidTrackballProc, serverClient);
     t = AddInputDevice(serverClient, androidTrackballProc, TRUE);
+    t->name = strdup("trackball");
     LogMessage(X_DEFAULT, "[events] InitInput: adding keybd proc %p (serverClient: %p)", androidKeybdProc, serverClient);
     k = AddInputDevice(serverClient, androidKeybdProc, TRUE);
+    k->name = strdup("keyboard");
+
+    /* LogMessage(X_DEFAULT, "[events] InitInput: Initializing devices"); */
+    /* rc = AllocDevicePair(serverClient, "AndroiX", &p, &k, */
+    /*                      androidMouseProc, */
+    /*                      androidKeybdProc, */
+    /*                      FALSE); */
+
+  /* if (rc != Success) */
+  /*     FatalError("Failed to init Xnest default devices.\n"); */
 
     LogMessage(X_DEFAULT, "[events] InitInput: registering mouse %p", p);
-    RegisterPointerDevice(p);
+    /* RegisterPointerDevice(p); */
     xiclass = MakeAtom(XI_MOUSE, sizeof(XI_MOUSE) - 1, TRUE);
     AssignTypeAndName(p, xiclass, "Android mouse");
     LogMessage(X_DEFAULT, "[events] InitInput: registering trackball %p", t);
-    RegisterPointerDevice(t);
+    /* RegisterPointerDevice(t); */
     xiclass = MakeAtom(XI_MOUSE, sizeof(XI_MOUSE) - 1, TRUE);
     AssignTypeAndName(t, xiclass, "Android trackball");
     LogMessage(X_DEFAULT, "[events] InitInput: registering keyboard %p", k);
-    RegisterKeyboardDevice(k);
+    /* RegisterKeyboardDevice(k); */
     xiclass = MakeAtom(XI_KEYBOARD, sizeof(XI_KEYBOARD) - 1, TRUE);
     AssignTypeAndName(k, xiclass, "Android keyboard");
     LogMessage(X_DEFAULT, "[events] InitInput: AddEnabledDevice wakeupFD[0]", Android->wakeupFD[0]);
     AddEnabledDevice(Android->wakeupFD[0]);
+
     (void)mieqInit();
+    InitEventList(GetMaximumEventsNum());;
 }
 
 void
