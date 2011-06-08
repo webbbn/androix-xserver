@@ -217,8 +217,6 @@ InitInput(int argc, char *argv[])
     Atom xiclass;
     int rc;
 
-    /* InitEvents(); */
-
     LogMessage(X_DEFAULT, "[events] InitInput: adding mouse proc %p (serverClient: %p)", androidMouseProc, serverClient);
     p = AddInputDevice(serverClient, androidMouseProc, TRUE);
     p->name = strdup("pointer");
@@ -228,15 +226,6 @@ InitInput(int argc, char *argv[])
     LogMessage(X_DEFAULT, "[events] InitInput: adding keybd proc %p (serverClient: %p)", androidKeybdProc, serverClient);
     k = AddInputDevice(serverClient, androidKeybdProc, TRUE);
     k->name = strdup("keyboard");
-
-    /* LogMessage(X_DEFAULT, "[events] InitInput: Initializing devices"); */
-    /* rc = AllocDevicePair(serverClient, "AndroiX", &p, &k, */
-    /*                      androidMouseProc, */
-    /*                      androidKeybdProc, */
-    /*                      FALSE); */
-
-  /* if (rc != Success) */
-  /*     FatalError("Failed to init Xnest default devices.\n"); */
 
     LogMessage(X_DEFAULT, "[events] InitInput: registering mouse %p", p);
     /* RegisterPointerDevice(p); */

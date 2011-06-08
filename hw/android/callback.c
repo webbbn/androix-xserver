@@ -30,7 +30,7 @@ void androidCallbackTouchDown(void *mousePtr, int x, int y) {
   valuators[0] = x;
   valuators[1] = y;
   valuator_mask_set_range(&mask, 0, 2, valuators);
-  QueuePointerEvents(mousePtr, ButtonPress, 1, POINTER_RELATIVE, &mask);
+  QueuePointerEvents(mousePtr, ButtonPress, 1, POINTER_ABSOLUTE, &mask);
 }
 
 void androidCallbackTouchMove(void *mousePtr, int x, int y) {
@@ -46,12 +46,16 @@ void androidCallbackTouchMove(void *mousePtr, int x, int y) {
 }
 
 void androidCallbackTouchUp(void *mousePtr, int x, int y) {
+  int valuators[2];
   ValuatorMask mask;
 
   LogMessage(X_DEFAULT, "[native] androidCallbackTouchUp: mouse: %p x: %d y: %d", mousePtr, x, y);
   /* Press */
-  valuator_mask_set_range(&mask, 0, 0, NULL);
-  QueuePointerEvents(mousePtr, ButtonRelease, 1, POINTER_RELATIVE, &mask);
+  /* Press */
+  valuators[0] = x;
+  valuators[1] = y;
+  valuator_mask_set_range(&mask, 0, 2, valuators);
+  QueuePointerEvents(mousePtr, ButtonRelease, 1, POINTER_ABSOLUTE, &mask);
 }
 
 void androidCallbackTrackballNormalizedMotion(void *ballPtr, double fx, double fy) {
